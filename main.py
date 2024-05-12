@@ -17,6 +17,7 @@ def open_image():
     )
     if file_path:
         text = extractor.extractText(file_path)
+        extracted_text.insert(tk.END, text)
         display_image(file_path)
 
 
@@ -28,12 +29,18 @@ def display_image(file_path):
     status_label.config(text=f"Image loaded: {file_path}")
 
 
+def tess_path_select():
+    path = extractor.selectPath()
+    tess_path_label["text"] = path
+
+
 root = tk.Tk()
 root.title("Extract Text from Image")
-path_button = tk.Button(
-    root, text="Select Path to Tesseract", command=extractor.selectPath
-)
+path_button = tk.Button(root, text="Select Path to Tesseract", command=tess_path_select)
 path_button.pack(padx=20, pady=10)
+
+tess_path_label = tk.Label(root, text=extractor.tesseract_cmd_path)
+tess_path_label.pack()
 
 # text_widget = tk.Text(root, wrap=tk.WORD, height=15, width=35)
 open_button = tk.Button(root, text="Select Image", command=open_image)
@@ -43,5 +50,6 @@ image_label.pack(padx=20, pady=20)
 status_label = tk.Label(root, text="", padx=20, pady=10)
 status_label.pack()
 
-
+extracted_text = tk.Text(root)
+extracted_text.pack()
 root.mainloop()
